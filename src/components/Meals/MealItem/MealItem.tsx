@@ -3,14 +3,14 @@ import classes from './MealItem.module.css';
 import MealItemForm from './MealItemForm';
 import CartContext from '../../../store/cart-context';
 
-type MealItemPropsType = {
+export type MealItemType = {
   id: string;
   name: string;
   description: string;
   price: number;
 };
 
-const MealItem = (props: MealItemPropsType) => {
+const MealItem = (props: MealItemType) => {
   const cartCtx = React.useContext(CartContext);
 
   const formattedPrice = `$${props.price.toFixed(2)}`;
