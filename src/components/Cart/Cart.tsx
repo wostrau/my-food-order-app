@@ -5,7 +5,7 @@ import Modal from '../UI/Modal';
 import CartContext from '../../store/cart-context';
 import CartItem from './CartItem';
 import { CartItemType } from '../../store/CartProvider';
-import Checkout from './Checkout';
+import Checkout, { OrderType } from './Checkout';
 
 const Cart = (props: { onClose: () => void }) => {
   const [isCheckout, setIsCheckout] = React.useState<boolean>(false);
@@ -23,6 +23,16 @@ const Cart = (props: { onClose: () => void }) => {
 
   const orderHandler = () => {
     setIsCheckout(true);
+  };
+
+  const submitOrderHandler = (userData: OrderType) => {
+    fetch(
+      'https://react-http-39eeb-default-rtdb.europe-west1.firebasedatabase.app/order.json',
+      {
+        method: 'POST',
+        body: JSON.stringify({ user: userData, orderedItems: cartCtx.items }),
+      }
+    );
   };
 
   const cartItems = (
@@ -60,7 +70,9 @@ const Cart = (props: { onClose: () => void }) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onCancel={props.onClose} />}
+      {isCheckout && (
+        <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose} />
+      )}
       {!isCheckout && modalActions}
     </Modal>
   );
